@@ -53,3 +53,36 @@ export const createDir = (dirId, name) => async (dispatch) => {
     alert(e.response.data.message)
   }
 }
+
+export const uploadFile = (file, dirId) => async (dispatch) => {
+  try {
+    const formData = new FormData()
+    formData.append('file', file)
+    if (dirId) {
+      formData.append('parent', dirId)
+    }
+    const response = await axios.post('http://localhost:5000/api/file/upload', formData, {
+      headers: {
+        Authorization: localStorage.getItem('token')
+      },
+      onUploadProgress: (progressEvent) => {
+        const totalLength = progressEvent.lengthComputable
+          ? progressEvent.total
+          : progressEvent.target.getResponseHeader('content-length') ||
+            progressEvent.target.getResponseHeader(
+              'x-decompressed-content-length'
+            )
+        console.log('total', totalLength)
+        if (totalLength) {
+          let progress = Math.round((progressEvent.loaded * 100) / totalLength)
+          console.log(progress)
+        }
+      }
+    })
+    console.log(response)
+    dispatch(addFile(response.data))
+  } catch (e) {
+    console.error(e)
+    alert(e.response.data.message)
+  }
+}

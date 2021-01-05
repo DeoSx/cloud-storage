@@ -9,15 +9,14 @@ const File = ({ file }) => {
   const dispatch = useDispatch()
   const currentDir = useSelector((state) => state.files.currentDir)
 
-  const openDirectory = () => {
-    dispatch(pushToDir(currentDir))
-    dispatch(setCurDir(file._id))
+  const openDirectory = (file) => {
+    if (file.type === 'dir') {
+      dispatch(pushToDir(currentDir))
+      dispatch(setCurDir(file._id))
+    }
   }
   return (
-    <div
-      className="file"
-      onClick={file.type === 'dir' ? () => openDirectory() : ''}
-    >
+    <div className="file" onClick={() => openDirectory(file)}>
       <img
         src={file.type === 'dir' ? dirLogo : fileLogo}
         alt=""

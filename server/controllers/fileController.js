@@ -1,3 +1,5 @@
+const config = require('config')
+const fs = require('fs')
 const File = require('../models/File')
 const User = require('../models/User')
 const fileService = require('../services/fileServices')
@@ -36,6 +38,55 @@ class FileController {
     } catch (e) {
       console.error(e)
       return res.status(500).json({ message: 'Server error' })
+    }
+  }
+
+  async uploadFile(req, res) {
+    try {
+      const file = req.files.file
+      const parent = await File.findOne({
+        user: req.user.id,
+        _id: req.body.parent
+      })
+      const user = await User.findOne({ _id: req.user.id })
+
+      if (user.usedSpace + file.size > user.diskSpace) {
+        return res
+          .status(400)
+          .json({ message: 'You have not free space to upload that file' })
+      }
+
+      let path
+      if (parent) {
+        path = `${config.get('filePath')}/${user._id}/${parent.path}/${
+          file.name
+        }`
+      } else {
+        path = `${config.get('filePath')}/${user._id}/${file.name}`
+      }
+
+      if (fs.existsSync(path)) {
+        return res.status(400).json({ message: 'File already exist' })
+      }
+
+      file.mv(path)
+
+      const type = file.name.split('.').pop()
+      const dbFile = await new File({
+        name: file.name,
+        type,
+        size: file.size,
+        user: user._id,
+        path: parent && parent.path,
+        parent: parent && parent._id
+      })
+
+      await user.save()
+      await dbFile.save()
+      res.json(dbFile)
+    } catch (e) {
+      console.error(e)
+      return res.status(500).json({ message: 'Upload file error' })
     }
   }
 }
