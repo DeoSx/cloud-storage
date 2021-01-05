@@ -4,7 +4,8 @@ import {
   POPUP_STATE,
   PUSH_TO_STACK,
   SET_CUR_DIR,
-  SET_FILES
+  SET_FILES,
+  DELETE_FILE
 } from '../constrants'
 
 export const setFiles = (files) => ({ type: SET_FILES, payload: files })
@@ -15,6 +16,7 @@ export const setPopupState = (display) => ({
   payload: display
 })
 export const pushToDir = (dir) => ({ type: PUSH_TO_STACK, payload: dir })
+export const deleteFileAction = (file) => ({ type: DELETE_FILE, payload: file })
 
 export const fetchFiles = (dirId) => async (dispatch) => {
   try {
@@ -112,6 +114,24 @@ export const fileDownload = async (file) => {
       link.click()
       link.remove()
     }
+  } catch (e) {
+    console.error(e)
+    alert(e.response.data.message)
+  }
+}
+
+export const deleteFile = (file) => async (dispatch) => {
+  try {
+    const response = await axios.delete(
+      `http://localhost:5000/api/file?id=${file._id}`,
+      {
+        headers: {
+          Authorization: localStorage.getItem('token')
+        }
+      }
+    )
+    dispatch(deleteFileAction(file))
+    alert(response.data.message)
   } catch (e) {
     console.error(e)
     alert(e.response.data.message)

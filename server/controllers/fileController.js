@@ -72,12 +72,17 @@ class FileController {
       file.mv(path)
 
       const type = file.name.split('.').pop()
+      let filePath = file.name
+      if (parent) {
+        return `${parent.path}/${file.name}`
+      }
+
       const dbFile = await new File({
         name: file.name,
         type,
         size: file.size,
         user: user._id,
-        path: parent && parent.path,
+        path: filePath,
         parent: parent && parent._id
       })
 
@@ -106,6 +111,23 @@ class FileController {
     } catch (e) {
       console.error(e)
       return res.status(500).json({ message: 'Download file error' })
+    }
+  }
+
+  async deleteFile(req, res) {
+    try {
+      const file = await File({ _id: req.query.id, user: req.user.id })
+      if (!file) {
+        return res.status(404).json({ message: 'File not found' })
+      }
+      fileService.deleteFile(file)
+      await file.remove()
+      return res.json({ message: 'File was deleted' })
+    } catch (e) {
+      console.error(e)
+      return res
+        .status(400)
+        .json({ message: 'Error, maybe directory not empty' })
     }
   }
 }
