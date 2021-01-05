@@ -10,6 +10,16 @@
   &__create {
     margin-left: 10px;
   }
+  &__upload-input {
+    display: none;
+  }
+
+  &__upload-label {
+    border: 2px dashed $font-color;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin-left: 10px;
+  }
 }
 
 .filelist {
@@ -55,6 +65,24 @@
     grid-column-start: 6;
     justify-self: center;
   }
+  &__btn {
+    display: none;
+  }
+
+  &:hover &__date {
+    grid-column-start: 3;
+  }
+  &:hover &__size {
+    grid-column-start: 4;
+  }
+  &:hover &__download {
+    grid-column-start: 5;
+    display: block;
+  }
+  &:hover &__delete {
+    grid-column-start: 6;
+    display: block;
+  }
 }
 
 .popup {
@@ -91,4 +119,15 @@
   input {
     margin: 20px 0px;
   }
+}
+
+.drop-area {
+  width: 100%;
+  height: calc(100vh - 50px - 40px);
+  margin: 20px;
+  border: dashed $font-color 2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 40px;
 }

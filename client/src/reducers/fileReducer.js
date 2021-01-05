@@ -3,7 +3,8 @@ import {
   SET_FILES,
   ADD_FILE,
   POPUP_STATE,
-  PUSH_TO_STACK
+  PUSH_TO_STACK,
+  DELETE_FILE
 } from '../constrants'
 
 const initialState = {
@@ -39,6 +40,13 @@ export default function fileReducer(state = initialState, action) {
       return {
         ...state,
         dirStack: [...state.dirStack, action.payload]
+      }
+    case DELETE_FILE:
+      return {
+        ...state,
+        files: [
+          ...state.files.filter((file) => file._id !== action.payload._id)
+        ]
       }
     default:
       return state
