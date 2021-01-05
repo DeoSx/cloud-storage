@@ -1,5 +1,5 @@
 import React from 'react'
-import './FileList.scss'
+import '../Disk.scss'
 import { useSelector } from 'react-redux'
 import File from './File'
 

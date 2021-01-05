@@ -1,3 +1,5 @@
+@import "../../utils/colors.scss";
+
 .disk {
   margin-top: 20px;
 
@@ -7,5 +9,86 @@
 
   &__create {
     margin-left: 10px;
+  }
+}
+
+.filelist {
+  margin: 20px 0;
+
+  &__header {
+    display: grid;
+    grid-template-columns: 1fr 4fr repeat(4, 1fr);
+  }
+
+  &__name {
+    grid-column-start: 2;
+  }
+  &__date {
+    grid-column-start: 5;
+    justify-self: center;
+  }
+  &__size {
+    grid-column-start: 6;
+    justify-self: center;
+  }
+}
+
+.file {
+  margin: 10px 0;
+  border-bottom: solid 2px $font-color;
+  display: grid;
+  grid-template-columns: 1fr 4fr repeat(4, 1fr);
+  align-items: center;
+
+  &:hover {
+    transform: scale(1.02);
+  }
+  &__img {
+    justify-self: center;
+  }
+
+  &__date {
+    grid-column-start: 5;
+    justify-self: center;
+  }
+  &__size {
+    grid-column-start: 6;
+    justify-self: center;
+  }
+}
+
+.popup {
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  right: 0;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &__content {
+    width: 400px;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__create {
+    align-self: flex-end;
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  input {
+    margin: 20px 0px;
   }
 }
